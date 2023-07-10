@@ -26,18 +26,7 @@ const makeSchemaLicenseKey = (args: { callback: (valid: boolean) => void; onSucc
       .superRefine(async (data, ctx) => {
         const parse = z.string().uuid().safeParse(data);
         if (parse.success) {
-          args.callback(true);
-          const response = await fetch(`${CONSOLE_URL}/api/license?key=${data}`);
-          args.callback(false);
-          const json = await response.json();
-          if (!json.valid) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: `License key ${json.message.toLowerCase()}`,
-            });
-          } else {
-            args.onSuccessValidate();
-          }
+          args.onSuccessValidate();
         }
       }),
   });
